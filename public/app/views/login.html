@@ -1,0 +1,16 @@
+<div>
+    <h1>Log In</h1>
+    <p>Log in to continue.</p>
+    <uib-alert ng-if="loginError" type="danger">{{loginError}}</uib-alert>
+    <form name="loginForm" ng-submit="submitLogin($event)">
+        <label> Username:
+            <input type="text" name="username" ng-model="loginUsername" />
+        </label>
+        <br />
+        <label> Password:
+            <input type="password" name="pass" ng-model="loginPass" />
+        </label>
+        <br />
+        <input type="submit" id="submit" value="Submit" />
+    </form>
+</div>

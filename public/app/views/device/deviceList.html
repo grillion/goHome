@@ -1,0 +1,11 @@
+<div ui-layout="{flow:'row', dividerSize:0}">
+    <div ui-layout-container size="28px">
+        <button class="btn btn-success btn-xs" ui-sref="app.devices.create"><span class="glyphicon glyphicon-plus"></span> Add device</button>
+        <button class="btn btn-primary btn-xs" ng-if="selectedDeviceCount" ng-click="editDevice()"><span class="glyphicon glyphicon-plus"></span> Edit device</button>
+        <button class="btn btn-danger btn-xs" ng-if="selectedDeviceCount" ng-click="removeDevice()"><span class="glyphicon glyphicon-minus"></span> Remove device</button>
+    </div>
+    <!--  -->
+    <div ui-layout-container="center" id="devicesTableContainer">
+        <div id="devicesGrid" ui-grid="deviceGridOptions" class="grid" ui-grid-selection ui-grid-auto-resize ng-style="getTableHeight()"></div>
+    </div>
+</div>

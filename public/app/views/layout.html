@@ -1,0 +1,29 @@
+<div ui-layout="{dividerSize: 0}">
+    <!-- Header -->
+    <div ui-layout-container size="40px" class="layoutNorth">
+        <a ui-sref="/logout" class="pull-right">Logout</a>
+    </div>
+
+    <!-- Second Row-->
+    <div ui-layout-container>
+
+        <div ui-layout="{flow : 'column', dividerSize: 0}">
+            <!-- Left Nav -->
+            <div ui-layout-container size="125px">
+                <div ui-layout="{flow: 'row', dividerSize: 0}">
+                    <div ui-layout-container size="30px"></div>
+                    <hb-nav ui-layout-container="central"></hb-nav>
+                </div>
+            </div>
+
+            <!-- Center Pane -->
+            <div id="mainLayoutCenterPane" ui-layout-container="central">
+                <div ui-layout="{flow : 'row', dividerSize: 0}">
+                    <div id="pageBreadcrumb" ui-layout-container size="30px"><div ncy-breadcrumb></div></div>
+                    <div id="sizedContentView" class="no-animate" ui-layout-container="central" ui-view="content"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

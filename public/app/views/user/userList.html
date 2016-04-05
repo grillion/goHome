@@ -1,0 +1,11 @@
+<div ui-layout="{flow:'row', dividerSize:0}">
+    <div ui-layout-container size="28px">
+        <button class="btn btn-success btn-xs" ui-sref="app.users.create"><span class="glyphicon glyphicon-plus"></span> Add user</button>
+        <button class="btn btn-primary btn-xs" ng-if="selectedUserCount" ng-click="editUser()"><span class="glyphicon glyphicon-plus"></span> Edit user</button>
+        <button class="btn btn-danger btn-xs" ng-if="selectedUserCount" ng-click="removeUser()"><span class="glyphicon glyphicon-minus"></span> Remove user</button>
+    </div>
+    <!--  -->
+    <div ui-layout-container="center" id="usersTableContainer">
+        <div id="usersGrid" ui-grid="usersGridOptions" class="grid" ui-grid-selection ui-grid-auto-resize ng-style="getTableHeight()"></div>
+    </div>
+</div>

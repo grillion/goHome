@@ -1,9 +1,12 @@
 /**
  * @typedef {Object} UserDef
+ * @property {ObjectID} _id
  * @property {String} name
  * @property {String} username
  * @property {String} email
  * @property {String} password
+ * @property {String} created
+ * @property {String} updated
  */
 
 angular.module("homebase-api.users", []).factory(

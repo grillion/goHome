@@ -80,6 +80,7 @@ module.controller("UserListCtrl", ['$rootScope', '$scope', '$state', 'HomebaseUs
     $scope.removeUser = function(){
       var currentSelection = $scope.userGridApi.selection.getSelectedRows()[0];
       HomebaseUsers.remove(currentSelection._id)
+        .then(function(){ toaster.pop('success', "User Removed", "The user was removed successfully."); })
         .then(loadTableData)
         .catch(function(err){
           toaster.pop('error', "Failed to update user", err);

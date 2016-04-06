@@ -33,13 +33,20 @@ module.controller("DeviceListCtrl", ['$rootScope', '$scope', '$state', 'Homebase
       columnDefs: [{
         displayName: "ID",
         field: "_id",
-        maxWidth: 50
+        maxWidth: 220
+      },{
+        displayName: "Type",
+        field: "type",
+        maxWidth: 100
       },{
         displayName: "Name",
         field: "name"
       },{
-        displayName: "Type",
-        field: "type"
+        displayName: "Created",
+        field: "created"
+      },{
+        displayName: "Updated",
+        field: "updated"
       }]
     };
 
@@ -70,6 +77,7 @@ module.controller("DeviceListCtrl", ['$rootScope', '$scope', '$state', 'Homebase
     $scope.removeDevice = function(){
       var currentSelection = $scope.deviceGridApi.selection.getSelectedRows()[0];
       HomebaseDevices.remove(currentSelection._id)
+        .then(function(){ toaster.pop('success', "Device Removed", "The device was removed successfully."); })
         .then(loadTableData)
         .catch(function(err){
           toaster.pop('error', "Failed to update device", err);

@@ -14,7 +14,7 @@ type UserAuth struct {
 
 type Auth struct{}
 
-func (A Auth) Login(username string, password string) (sessionId *bson.ObjectId) {
+func (A Auth) Login(username string, password string) *bson.ObjectId {
 	Users := Users{}
 	user, err := Users.FindOne(bson.M{"username": username, "password": password})
 
@@ -29,5 +29,5 @@ func (A Auth) Login(username string, password string) (sessionId *bson.ObjectId)
 	// Found a valid user, update session table
 	getC("session").Upsert(bson.M{"userId": user.ID}, newAuth)
 
-	return
+	return &newAuth.SessionID
 }

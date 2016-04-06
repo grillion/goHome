@@ -72,7 +72,11 @@ func AddRoutes(r *mux.Router)  {
 	r.Handle("/api/auth/login", http.HandlerFunc(handleAuthLogin)).Methods("POST")
 
 	// Get all devices
+	r.Handle("/api/devices/", http.HandlerFunc(handleDeviceCreate)).Methods("POST")
 	r.Handle("/api/devices/", http.HandlerFunc(handleDeviceGetAll)).Methods("GET")
+	r.Handle("/api/devices/", http.HandlerFunc(handleDeviceUpdate)).Methods("PUT")
+	r.Handle("/api/devices/{id}", http.HandlerFunc(handleDeviceGet)).Methods("GET")
+	r.Handle("/api/devices/{id}", http.HandlerFunc(handleDeviceRemove)).Methods("DELETE")
 
 	// User CRUD operations
 	r.Handle("/api/users/", http.HandlerFunc(handleUserCreate)).Methods("POST")

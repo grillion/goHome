@@ -1,3 +1,12 @@
+/**
+ * @typedef {Object} DeviceDef
+ * @property {ObjectID} _id
+ * @property {String} name
+ * @property {String} type
+ * @property {String} created
+ * @property {String} updated
+ */
+
 angular.module("homebase-api.devices", []).factory(
   'HomebaseDevices', [ '$q', '$log', 'HomebaseApi', function($q, $log, HomebaseApi) {
     'use strict';
@@ -28,10 +37,18 @@ angular.module("homebase-api.devices", []).factory(
     };
 
     /**
-     * Remove a device entry
+     * Update a Device
+     * @param {DeviceDef} userDef
+     */
+    HomebaseDevices.update = function(deviceDef){
+      return HomebaseApi.put("devices/", null, deviceDef);
+    };
+
+    /**
+     * Remove a user entry
      * @param id
      */
-    HomebaseDevices.delete = function(id){
+    HomebaseDevices.remove = function(id){
       return HomebaseApi.delete("devices/" + id);
     };
 

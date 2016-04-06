@@ -93,6 +93,22 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
       }
     })
 
+    .state("app.devices.edit", {
+      url: "/edit/:deviceId",
+      params: {
+        deviceId: null
+      },
+      views: {
+        "content@app": {
+          controller: "EditDeviceCtrl",
+          templateUrl: "app/views/device/editDevice.html"
+        }
+      },
+      ncyBreadcrumb: {
+        label: 'Edit'
+      }
+    })
+
     // System Settings
     .state("app.system", {
       url: "/system",

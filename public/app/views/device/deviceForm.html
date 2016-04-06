@@ -8,7 +8,7 @@
     <div class="form-group">
         <label for="deviceType" class="col-sm-2 control-label">Device Type</label>
         <div class="col-sm-8">
-            <select ng-model="device.type" class="form-control" id="deviceType" placeholder="Select a device type" required>
+            <select ng-model="device.type" class="form-control" id="deviceType" placeholder="Select a device type" required ng-disabled="device._id">
                 <option value="mpower">mPower</option>
             </select>
         </div>

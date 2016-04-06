@@ -2,6 +2,7 @@
     <div ui-layout-container size="28px">
         <button class="btn btn-success btn-xs" ui-sref="app.devices.create"><span class="glyphicon glyphicon-plus"></span> Add device</button>
         <button class="btn btn-primary btn-xs" ng-if="selectedDeviceCount" ng-click="editDevice()"><span class="glyphicon glyphicon-plus"></span> Edit device</button>
+        <button class="btn btn-primary btn-xs" ng-if="selectedDeviceCount" ng-click="configureDevice()"><span class="glyphicon glyphicon-cog"></span> Configure device</button>
         <button class="btn btn-danger btn-xs" ng-if="selectedDeviceCount" ng-click="removeDevice()"><span class="glyphicon glyphicon-minus"></span> Remove device</button>
     </div>
     <!--  -->

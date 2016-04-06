@@ -109,6 +109,24 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
       }
     })
 
+    .state("app.devices.configure", {
+      url: "/configure/:deviceId",
+      params: {
+        deviceId: null
+      },
+      views: {
+        "content@app": {
+          controller: "ConfigureDeviceCtrl",
+          templateUrl: "app/views/device/configureDevice.html"
+        }
+      },
+      ncyBreadcrumb: {
+        label: 'Configure'
+      }
+    })
+
+
+
     // System Settings
     .state("app.system", {
       url: "/system",
@@ -122,6 +140,9 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider) {
         label: 'System Settings'
       }
     })
+
+
+
 
     // Manage Users
     .state("app.users", {

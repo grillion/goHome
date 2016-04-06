@@ -1,5 +1,8 @@
 var module = angular.module("app.devices", []);
 
+/**
+ * Basic name and type form
+ */
 module.directive('deviceForm', function(){
   return {
     restrict: "E",
@@ -70,6 +73,13 @@ module.controller("DeviceListCtrl", ['$rootScope', '$scope', '$state', 'Homebase
     $scope.editDevice = function(){
       var currentSelection = $scope.deviceGridApi.selection.getSelectedRows()[0];
       $state.transitionTo("app.devices.edit", {
+        deviceId: currentSelection._id
+      });
+    };
+
+    $scope.configureDevice = function(){
+      var currentSelection = $scope.deviceGridApi.selection.getSelectedRows()[0];
+      $state.transitionTo("app.devices.configure", {
         deviceId: currentSelection._id
       });
     };
@@ -147,3 +157,35 @@ module.controller("EditDeviceCtrl", ['$rootScope', "$stateParams", '$scope', "$s
 
   }
 ]);
+
+/**
+ * Configure Device
+ */
+module.controller("ConfigureDeviceCtrl", ['$rootScope', "$stateParams", '$scope', "$state", 'toaster', 'HomebaseDevices',
+  function ($rootScope, $stateParams, $scope, $state, toaster, HomebaseDevices) {
+
+    $scope.device = {};
+
+    HomebaseDevices.get($stateParams.deviceId)
+      .then(function(deviceDef){
+        $scope.device = deviceDef;
+      })
+      .catch(function(err){
+        console.error("Cannot get deviceId: " + $stateParams.deviceId, err);
+      });
+
+    $scope.saveConfiguration = function(device){
+      HomebaseDevices.update(device)
+        .then(function(updatedDevice){
+          toaster.pop('success', "Device Updated", "Device was updated successfully.");
+          $state.transitionTo("app.devices");
+        })
+        .catch(function(err){
+          toaster.pop('error', "Failed to update device", err);
+        })
+
+    };
+
+  }
+]);
+

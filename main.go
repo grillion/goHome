@@ -1,13 +1,14 @@
 package main
 
 import (
-	"net/http"
-	"log"
 
-	"github.com/grillion/goHome/api"
-	"github.com/grillion/goHome/config"
-	"github.com/gorilla/mux"
+	"github.com/grillion/goHome/controllers/httpServices"
 	"github.com/grillion/goHome/db"
+	"fmt"
+	"time"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func init() {
@@ -16,18 +17,68 @@ func init() {
 
 func main() {
 
+	pid := syscall.Getpid()
+
 	// Close DB when exiting
 	defer db.CloseSession()
 
-	r := mux.NewRouter()
+	// Channels for application tasks
+	inform := make(chan int) // mPower inform event channel
+	sigs  := make(chan os.Signal, 1) // OS Signal channel
+	tick := time.Tick(1000 * time.Millisecond) // 1 second ticker for timed Application operations
+	exitCode := -1
 
-	// Install API Routes to MUX
-	api.AddRoutes(r)
+	// Start http services
+	// +--- Static Files
+	// +--- API End Points
+	// +--- mPower inform handler
+	go httpServices.Start()
 
-	// Serve the static dir
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir(config.GetWebAppRoot())))
+	// Redirect OS Signals to channel
+	signal.Notify(sigs)
 
-	log.Printf("Running Web Server on localhost:3000")
-	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	fmt.Println("Application ready (", pid, ")")
+
+	// Handle operations until told to exit ( or we crash )
+	for exitCode < 0 {
+		select {
+		case newSignal := <-sigs:
+
+			switch newSignal {
+			// kill -SIGHUP XXXX
+			case syscall.SIGHUP:
+				fmt.Println("hungup")
+
+			// kill -SIGINT XXXX or Ctrl+c
+			case syscall.SIGINT:
+				fmt.Println("interrupt")
+				exitCode = 0
+
+			// kill -SIGTERM XXXX
+			case syscall.SIGTERM:
+				fmt.Println("force stop")
+				exitCode = 0
+
+			// kill -SIGQUIT XXXX
+			case syscall.SIGQUIT:
+				fmt.Println("stop and core dump")
+				exitCode = 0
+
+			default:
+				fmt.Println("Unknown signal.")
+				exitCode = 1
+			}
+
+		case <-inform:
+			fmt.Println("inform")
+		case <-tick:
+			fmt.Print(".")
+		default:
+			time.Sleep(100 * time.Millisecond)
+		}
+	}
+
+	fmt.Println("Cleaning up")
+
+	os.Exit(exitCode)
 }

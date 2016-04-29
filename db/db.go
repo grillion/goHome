@@ -10,6 +10,9 @@ var (
 )
 
 func init(){
+
+	println("Conencting to mongo at " + config.GetMongoHost() + "...")
+
 	session, err := mgo.Dial(config.GetMongoHost())
 
 	if err != nil {

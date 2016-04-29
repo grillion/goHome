@@ -1,10 +1,12 @@
-package api
+package httpServices
 
 import (
 	"net/http"
 	"encoding/json"
 	"log"
 	"github.com/gorilla/mux"
+	"github.com/grillion/goHome/config"
+	"github.com/grillion/goHome/api"
 )
 
 type ErrorResponse struct {
@@ -13,32 +15,25 @@ type ErrorResponse struct {
 
 func init(){
 
+	r := mux.NewRouter()
+
+	api.AddRoutes(r)
+
+	addStaticFiles(r)
+
+
+	http.Handle("/", r)
 }
 
+func addStaticFiles(r *mux.Router){
+	// Serve the static dir
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir(config.GetWebAppRoot())))
+	log.Printf("    Static files added to http services")
+}
 
-/**
- * Install the api routes to the http server
- */
-func AddRoutes(r *mux.Router)  {
-
-	// Auth
-	r.Handle("/api/auth/login", http.HandlerFunc(handleAuthLogin)).Methods("POST")
-
-	// Get all devices
-	r.Handle("/api/devices/", http.HandlerFunc(handleDeviceCreate)).Methods("POST")
-	r.Handle("/api/devices/", http.HandlerFunc(handleDeviceGetAll)).Methods("GET")
-	r.Handle("/api/devices/", http.HandlerFunc(handleDeviceUpdate)).Methods("PUT")
-	r.Handle("/api/devices/{id}", http.HandlerFunc(handleDeviceGet)).Methods("GET")
-	r.Handle("/api/devices/{id}", http.HandlerFunc(handleDeviceRemove)).Methods("DELETE")
-
-	// User CRUD operations
-	r.Handle("/api/users/", http.HandlerFunc(handleUserCreate)).Methods("POST")
-	r.Handle("/api/users/", http.HandlerFunc(handleUserGetAll)).Methods("GET")
-	r.Handle("/api/users/", http.HandlerFunc(handleUserUpdate)).Methods("PUT")
-	r.Handle("/api/users/{id}", http.HandlerFunc(handleUserGet)).Methods("GET")
-	r.Handle("/api/users/{id}", http.HandlerFunc(handleUserRemove)).Methods("DELETE")
-
-	log.Printf("    API routes added to http services")
+func Start(){
+	http.ListenAndServe(":3000", nil);
+	log.Printf("Running Web Server on localhost:3000")
 }
 
 

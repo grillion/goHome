@@ -10,7 +10,7 @@ const SessionSeconds = 3600
 
 func init(){
 	mongoDb = "goHome"
-	mongoHost = "192.168.1.10"
+	mongoHost = "192.168.10.10"
 	webAppRoot = "/Users/mgrill/Workspaces/go/src/github.com/grillion/goHome/public"
 }
 

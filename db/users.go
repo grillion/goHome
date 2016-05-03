@@ -31,7 +31,7 @@ func (U Users) Create(u User) (*User, error) {
 	u.Created = time.Now()
 	u.Updated = u.Created
 
-	insertError := getC("users").Insert(u)
+	insertError := GetC("users").Insert(u)
 
 	if insertError != nil {
 		return nil, insertError
@@ -41,12 +41,12 @@ func (U Users) Create(u User) (*User, error) {
 }
 
 func (U Users) Get(id bson.ObjectId) (user *User, err error) {
-	err = getC("users").FindId(id).One(&user)
+	err = GetC("users").FindId(id).One(&user)
 	return
 }
 
 func (U Users) GetAll() (users []User, err error) {
-	err = getC("users").Find(nil).All(&users)
+	err = GetC("users").Find(nil).All(&users)
 	if users == nil {
 		users = []User{}
 	}
@@ -54,7 +54,7 @@ func (U Users) GetAll() (users []User, err error) {
 }
 
 func (U Users) Find(query interface{}) (results []User, err error) {
-	err = getC("users").Find(query).All(&results)
+	err = GetC("users").Find(query).All(&results)
 	if results == nil {
 		results = []User{}
 	}
@@ -62,18 +62,18 @@ func (U Users) Find(query interface{}) (results []User, err error) {
 }
 
 func (U Users) FindOne(query interface{}) (result User, err error) {
-	err = getC("users").Find(query).One(&result)
+	err = GetC("users").Find(query).One(&result)
 	return
 }
 
 
 func (U Users) Update(u *User) error {
 	u.Updated = time.Now()
-	return getC("users").UpdateId(u.ID, u)
+	return GetC("users").UpdateId(u.ID, u)
 
 }
 
 func (U Users) RemoveUser(id bson.ObjectId) error {
-	return getC("users").RemoveId(id)
+	return GetC("users").RemoveId(id)
 }
 

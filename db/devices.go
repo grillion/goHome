@@ -26,7 +26,7 @@ func (D Devices) Create(d Device) (*Device, error) {
 	d.Created = time.Now()
 	d.Updated = d.Created
 
-	insertError := getC("devices").Insert(d)
+	insertError := GetC("devices").Insert(d)
 
 	if insertError != nil {
 		return nil, insertError
@@ -36,12 +36,12 @@ func (D Devices) Create(d Device) (*Device, error) {
 }
 
 func (D Devices) Get(id bson.ObjectId) (device *Device, err error) {
-	err = getC("devices").FindId(id).One(&device)
+	err = GetC("devices").FindId(id).One(&device)
 	return
 }
 
 func (D Devices) GetAll() (devices []Device, err error) {
-	err = getC("devices").Find(nil).All(&devices)
+	err = GetC("devices").Find(nil).All(&devices)
 	if devices == nil {
 		devices = []Device{}
 	}
@@ -49,7 +49,7 @@ func (D Devices) GetAll() (devices []Device, err error) {
 }
 
 func (D Devices) Find(query interface{}) (results []Device, err error) {
-	err = getC("devices").Find(query).All(&results)
+	err = GetC("devices").Find(query).All(&results)
 	if results == nil {
 		results = []Device{}
 	}
@@ -57,18 +57,18 @@ func (D Devices) Find(query interface{}) (results []Device, err error) {
 }
 
 func (D Devices) FindOne(query interface{}) (result Device, err error) {
-	err = getC("devices").Find(query).One(&result)
+	err = GetC("devices").Find(query).One(&result)
 	return
 }
 
 
 func (D Devices) Update(d *Device) error {
 	d.Updated = time.Now()
-	return getC("devices").UpdateId(d.ID, d)
+	return GetC("devices").UpdateId(d.ID, d)
 
 }
 
 func (D Devices) RemoveDevice(id bson.ObjectId) error {
-	return getC("devices").RemoveId(id)
+	return GetC("devices").RemoveId(id)
 }
 

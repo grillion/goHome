@@ -27,7 +27,7 @@ func (A Auth) Login(username string, password string) *bson.ObjectId {
 	newAuth := UserAuth{user.ID, bson.NewObjectId(), time.Now()}
 
 	// Found a valid user, update session table
-	getC("session").Upsert(bson.M{"userId": user.ID}, newAuth)
+	GetC("session").Upsert(bson.M{"userId": user.ID}, newAuth)
 
 	return &newAuth.SessionID
 }

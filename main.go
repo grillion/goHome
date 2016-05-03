@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"log"
 )
 
 func init() {
@@ -32,12 +33,12 @@ func main() {
 	// +--- Static Files
 	// +--- API End Points
 	// +--- mPower inform handler
-	go httpServices.Start()
+	httpServices.Start()
 
 	// Redirect OS Signals to channel
 	signal.Notify(sigs)
 
-	fmt.Println("Application ready (", pid, ")")
+	log.Println("Application ready (", pid, ")")
 
 	// Handle operations until told to exit ( or we crash )
 	for exitCode < 0 {
@@ -47,25 +48,25 @@ func main() {
 			switch newSignal {
 			// kill -SIGHUP XXXX
 			case syscall.SIGHUP:
-				fmt.Println("hungup")
+				log.Println("hungup")
 
 			// kill -SIGINT XXXX or Ctrl+c
 			case syscall.SIGINT:
-				fmt.Println("interrupt")
+				log.Println("interrupt")
 				exitCode = 0
 
 			// kill -SIGTERM XXXX
 			case syscall.SIGTERM:
-				fmt.Println("force stop")
+				log.Println("force stop")
 				exitCode = 0
 
 			// kill -SIGQUIT XXXX
 			case syscall.SIGQUIT:
-				fmt.Println("stop and core dump")
+				log.Println("stop and core dump")
 				exitCode = 0
 
 			default:
-				fmt.Println("Unknown signal.")
+				log.Println("Unknown signal.")
 				exitCode = 1
 			}
 
@@ -78,7 +79,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("Cleaning up")
+	log.Println("Cleaning up")
 
 	os.Exit(exitCode)
 }

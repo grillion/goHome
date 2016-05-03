@@ -7,6 +7,8 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/grillion/goHome/config"
 	"github.com/grillion/goHome/api"
+	"fmt"
+	"github.com/grillion/mFi"
 )
 
 type ErrorResponse struct {
@@ -15,14 +17,6 @@ type ErrorResponse struct {
 
 func init(){
 
-	r := mux.NewRouter()
-
-	api.AddRoutes(r)
-
-	addStaticFiles(r)
-
-
-	http.Handle("/", r)
 }
 
 func addStaticFiles(r *mux.Router){
@@ -32,8 +26,40 @@ func addStaticFiles(r *mux.Router){
 }
 
 func Start(){
-	http.ListenAndServe(":3000", nil);
-	log.Printf("Running Web Server on localhost:3000")
+
+	appServer := http.NewServeMux()
+	appServerRoutes := mux.NewRouter()
+	api.AddRoutes(appServerRoutes)
+	addStaticFiles(appServerRoutes)
+	appServer.Handle("/", appServerRoutes)
+
+	informServer := http.NewServeMux()
+	informServerRoutes := mux.NewRouter()
+	informServerRoutes.HandleFunc("/inform", func(res http.ResponseWriter , req *http.Request){
+
+		iPkt, err := mFi.ParseInformPacket(req.Body)
+		if(nil != err){
+			fmt.Printf("Parse Errpr: %s\n", err)
+			return
+		}
+		if(nil == iPkt){
+			fmt.Println("Could not parse paylod")
+			return
+		}
+
+		mJSON, err := json.Marshal(iPkt)
+		log.Printf("New Inform Packet: \n%s\n", mJSON)
+
+		//inform.Save(bodyBytes)
+	})
+	informServer.Handle("/", informServerRoutes)
+
+	// API AND UI
+	go func(){ http.ListenAndServe(":3000", appServer); }()
+	log.Printf("Running App Server on localhost:3000")
+
+	go func(){ http.ListenAndServe(":6080", informServer); }()
+	log.Printf("Running Inform handler localhost:6080")
 }
 
 

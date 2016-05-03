@@ -26,6 +26,6 @@ func CloseSession(){
 	mongoSession.Close()
 }
 
-func getC(collection string) *mgo.Collection {
+func GetC(collection string) *mgo.Collection {
 	return mongoSession.Clone().DB(config.GetMongoDBName()).C(collection)
 }
